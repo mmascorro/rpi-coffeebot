@@ -1,0 +1,48 @@
+# Provides:          acremote
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the gunicorn server for remote
+# Description:       The gunicorn server for acremote
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+SITE_HOME=/home/pi/remoteapp
+NAME=remoteapp
+DESC="remote app"
+USER=root
+
+echo $DAEMON
+test -f $DAEMON || exit 0
+
+set -e
+
+start_daemon() {
+  cd $SITE_HOME && gunicorn remoteapp:app --user=$USER --group=$USER -D -b 0.0.0.0:80
+}
+
+stop_daemon() {
+  pkill -f gunicorn || true
+}
+
+case "$1" in
+ start)
+ start_daemon
+ ;;
+ stop)
+ stop_daemon
+ ;;
+ reload|restart|force-reload)
+ stop_daemon
+ sleep 5
+ start_daemon
+ ;;
+ *)
+ N=/etc/init.d/$NAME
+ echo "Usage: $N {start|stop|reload|restart|force-reload}" >&2
+ exit 1
+ ;;
+esac
+
+exit 0

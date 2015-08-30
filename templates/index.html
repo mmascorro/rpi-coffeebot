@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>COFFEE REMOTE</title>
+<style type="text/css">
+button {
+	display: block;
+	width: 90%;
+	height:256px;
+	border:none;
+	margin: 10px auto;
+}
+#on {
+	background-color: #73DF22;	
+}
+#off {
+	background-color: #D01E21;	
+}
+p {
+	text-align: center;
+	font-size: 2em;
+}
+</style>
+</head>
+
+<body>
+<p>Status: <span id="status"></span></p>
+<button id="on">Coffee On</button>
+<button id="off">Coffee Off</button>
+
+<script>
+function getStatus () {
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() {
+		if (this.readyState === 4) {
+			var msg = document.getElementById('status');
+			if (this.responseText == "0") {
+				msg.innerHTML = "On";
+			} else {
+				msg.innerHTML = "Off";
+			}	
+		}
+	}
+	request.open('GET', '/status', true);
+	request.send();
+
+}
+document.getElementById('on').addEventListener('click', function(){
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		var DONE = this.DONE || 4;
+		if (this.readyState === DONE){
+			getStatus();
+		}
+	};
+	request.open('GET', '/on', true);
+	request.send(null);
+});
+
+document.getElementById('off').addEventListener('click', function(){
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		var DONE = this.DONE || 4;
+		if (this.readyState === DONE){
+			getStatus();
+		}
+	};
+	request.open('GET', '/off', true);
+	request.send(null);
+});
+getStatus();
+</script>
+</body>
+</html>
+
