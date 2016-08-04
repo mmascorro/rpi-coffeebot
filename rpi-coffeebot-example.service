@@ -2,10 +2,10 @@
 Description=Coffee Remote
 
 [Service]
-WorkingDirectory=/home/pi/rpi-coffeebot/
 User=pi
-
-ExecStart=/usr/local/bin/gunicorn remoteapp:app -b 0.0.0.0:35011
+WorkingDirectory=/home/pi/rpi-coffeebot/
+Environment="PATH=/home/pi/rpi-coffeebot/venv/bin"
+ExecStart=/home/pi/rpi-coffeebot/venv/bin/gunicorn remoteapp:app -b 0.0.0.0:35011
 
 [Install]
 WantedBy=multi-user.target

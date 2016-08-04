@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 import gpio
-import urllib2
+import urllib.request
 import yaml
 
 app = Flask(__name__)
@@ -33,10 +33,10 @@ def status():
 def check():
 	stat_url = status_url
 	
-	response = urllib2.urlopen(stat_url)
-	html = response.read()
+	response = urllib.request.urlopen(stat_url)
+	html = response.read().decode('utf-8')
 	
-	if html == "1":
+	if html == '1':
 	        classToday = True
 	else:
 	        classToday = False
