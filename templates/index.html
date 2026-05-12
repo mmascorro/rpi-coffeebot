@@ -30,46 +30,38 @@ p {
 <button id="off">Coffee Off</button>
 
 <script>
+const statusMsg = document.getElementById('status');
+
 function getStatus () {
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-		if (this.readyState === 4) {
-			var msg = document.getElementById('status');
-			if (this.responseText == "1") {
-				msg.innerHTML = "On";
+	fetch('/status')
+		.then(resp => {return resp.text()})
+		.then(data => {
+			if (data === "1") {
+				statusMsg.innerHTML = "On";
 			} else {
-				msg.innerHTML = "Off";
+				statusMsg.innerHTML = "Off";
 			}	
-		}
-	}
-	request.open('GET', '/status', true);
-	request.send();
-
+		})
 }
-document.getElementById('on').addEventListener('click', function(){
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function () {
-		var DONE = this.DONE || 4;
-		if (this.readyState === DONE){
+
+document.getElementById('on').addEventListener('click', e => {
+	fetch('/on').then(resp => {
+		if (resp.status === true) {
 			getStatus();
 		}
-	};
-	request.open('GET', '/on', true);
-	request.send(null);
+	})
 });
 
-document.getElementById('off').addEventListener('click', function(){
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function () {
-		var DONE = this.DONE || 4;
-		if (this.readyState === DONE){
+document.getElementById('off').addEventListener('click', e => {
+	fetch('/off').then(resp => {
+		if (resp.status === true) {
 			getStatus();
 		}
-	};
-	request.open('GET', '/off', true);
-	request.send(null);
+	})
 });
+
 getStatus();
+
 </script>
 </body>
 </html>
