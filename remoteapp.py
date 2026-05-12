@@ -1,15 +1,16 @@
 from flask import Flask
 from flask import render_template
+from yaml import load, Loader
 import gpio
 import urllib.request
-import yaml
 
-app = Flask(__name__)
 sf = open('settings.yaml','r')
-settings = yaml.load(sf)
+settings = load(sf, Loader=Loader)
 
 pin = settings['pin']
 status_url = settings['url']
+
+app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
@@ -27,7 +28,7 @@ def off():
 
 @app.route('/status')
 def status():
-	return gpio.pin_status(pin)
+	return str(gpio.pin_status(pin))
 
 @app.route('/check')
 def check():
@@ -37,13 +38,11 @@ def check():
 	html = response.read().decode('utf-8')
 	
 	if html == '1':
-	        classToday = True
+		classToday = True
 	else:
-	        classToday = False
-	
+		classToday = False
 	if classToday:
-	        gpio.turn_on(pin)
-
+		gpio.turn_on(pin)
 	return ""
 
 if __name__ == '__main__':
