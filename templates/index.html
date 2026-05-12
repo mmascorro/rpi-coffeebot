@@ -35,7 +35,7 @@ function getStatus () {
 	request.onreadystatechange = function() {
 		if (this.readyState === 4) {
 			var msg = document.getElementById('status');
-			if (this.responseText == "0") {
+			if (this.responseText == "1") {
 				msg.innerHTML = "On";
 			} else {
 				msg.innerHTML = "Off";
