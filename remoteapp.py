@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from yaml import load, Loader
-import gpio
+from gpiozero import LED
 import urllib.request
 
 sf = open('settings.yaml','r')
@@ -11,6 +11,7 @@ pin = settings['pin']
 status_url = settings['url']
 
 app = Flask(__name__)
+device = LED(pin, active_high=False)
 
 @app.route('/')
 def hello_world():
@@ -18,17 +19,17 @@ def hello_world():
 
 @app.route('/on')
 def on():
-	gpio.turn_on(pin)
+	device.on()
 	return 'on'
 
 @app.route('/off')
 def off():
-	gpio.turn_off(pin)
+	device.off()
 	return 'off'
 
 @app.route('/status')
 def status():
-	return str(gpio.pin_status(pin))
+	return str(device.value)
 
 @app.route('/check')
 def check():
@@ -42,7 +43,7 @@ def check():
 	else:
 		classToday = False
 	if classToday:
-		gpio.turn_on(pin)
+		device.on()
 	return ""
 
 if __name__ == '__main__':
