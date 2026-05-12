@@ -46,7 +46,7 @@ function getStatus () {
 
 document.getElementById('on').addEventListener('click', e => {
 	fetch('/on').then(resp => {
-		if (resp.status === true) {
+		if (resp.ok === true) {
 			getStatus();
 		}
 	})
@@ -54,7 +54,7 @@ document.getElementById('on').addEventListener('click', e => {
 
 document.getElementById('off').addEventListener('click', e => {
 	fetch('/off').then(resp => {
-		if (resp.status === true) {
+		if (resp.ok === true) {
 			getStatus();
 		}
 	})
