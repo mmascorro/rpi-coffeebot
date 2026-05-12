@@ -1,3 +1,4 @@
 *.pyc
 settings.yaml
 venv/
+__pycache__/
